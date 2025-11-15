@@ -5,83 +5,111 @@ import api from './api';
 // For demonstration, use a fixed patient ID (1)
 const PATIENT_ID = 1; 
 
+// Helper to generate a date N days from now
+const getDateString = (dayOffset) => {
+  const date = new Date();
+  date.setDate(date.getDate() + dayOffset);
+  return date.toLocaleDateString(
+    'en-US', 
+    { weekday: 'short', month: 'short', day: 'numeric' }
+  );
+};
+
+const transformTasks = (flatTasks) => {
+    const tasks = {};
+    flatTasks.forEach(task => {
+        // Use due_date from BE as the key
+        const dateKey = task.due_date; 
+        if (!tasks[dateKey]) {
+            tasks[dateKey] = [];
+        }
+        tasks[dateKey].push(task);
+    });
+    return tasks;
+};
+
+
 const PatientToDo = () => {
-  const [prescriptions, setPrescriptions] = useState([]);
-  const [patientName, setPatientName] = useState('Patient Name'); // Placeholder
+    const [schedule, setSchedule] = useState({}); // Flat list from BE
+    const [dayWiseTasks, setDayWiseTasks] = useState({}); // Transformed list for rendering
 
-  const fetchPrescriptions = async () => {
-    try {
-      const response = await api.get(`/patient/${PATIENT_ID}/prescriptions`);
-      setPrescriptions(response.data);
-    } catch (error) {
-      console.error('Error fetching patient prescriptions:', error);
-    }
-  };
+    const fetchSchedule = async () => {
+        try {
+            // CALL THE NEW ENDPOINT
+            const response = await api.get(`/patient/${PATIENT_ID}/schedule`);
+            const flatSchedule = response.data;
+            setSchedule(flatSchedule);
+            setDayWiseTasks(transformTasks(flatSchedule));
+        } catch (error) {
+            console.error('Error fetching patient schedule:', error);
+        }
+    };
 
-  useEffect(() => {
-    fetchPrescriptions();
-  }, []);
+    useEffect(() => {
+        fetchSchedule();
+    }, []);
 
-  const handleToggleTaken = async (presId, currentStatus) => {
-    const newStatus = !currentStatus;
-    try {
-      // 1. Send PUT request to update status
-      await api.put(`/prescriptions/${presId}/status`, { is_taken: newStatus });
-      
-      // 2. Update state optimistically (without re-fetching everything)
-      setPrescriptions(prescriptions.map(pres => 
-        pres.id === presId ? { ...pres, is_taken: newStatus } : pres
-      ));
-      
-    } catch (error) {
-      console.error('Error updating prescription status:', error);
-      alert('Failed to update status.');
-    }
-  };
+    const handleToggleTaken = async (doseId, currentStatus) => {
+        const newStatus = !currentStatus;
+        try {
+            // CALL THE NEW DOSE ENDPOINT
+            await api.put(`/doses/${doseId}/status`, { is_taken: newStatus });
+            
+            // OPTIMISTIC UPDATE: Update the state locally
+            const updatedSchedule = schedule.map(dose => 
+                dose.dose_id === doseId ? { ...dose, is_taken: newStatus } : dose
+            );
+
+            setSchedule(updatedSchedule);
+            setDayWiseTasks(transformTasks(updatedSchedule)); // Re-transform for display
+
+        } catch (error) {
+            console.error('Error updating dose status:', error);
+            alert('Failed to update status.');
+        }
+    };
+
+  const dates = Object.keys(dayWiseTasks).sort((a, b) => new Date(a) - new Date(b));
 
   return (
-    <div className="container mt-5">
-      <h2>💊 Patient To-Do List (Patient ID: {PATIENT_ID})</h2>
-      <p>Click the checkbox when you've taken your medicine.</p>
-      
-      <table className="table table-striped table-hover table-bordered">
-        <thead className="table-info">
-          <tr>
-            <th>Medicine</th>
-            <th>Dosage</th>
-            <th>Time</th>
-            <th>Taken?</th>
-          </tr>
-        </thead>
-        <tbody>
-          {prescriptions.length === 0 ? (
-            <tr>
-              <td colSpan="4">No active prescriptions found.</td>
-            </tr>
-          ) : (
-            prescriptions.map((pres) => (
-              <tr 
-                key={pres.id} 
-                className={pres.is_taken ? 'table-success' : ''} 
-                style={{textDecoration: pres.is_taken ? 'line-through' : 'none'}}
-              >
-                <td>{pres.medicine_name}</td>
-                <td>{pres.dosage}</td>
-                <td>{pres.time_to_take}</td>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={pres.is_taken}
-                    onChange={() => handleToggleTaken(pres.id, pres.is_taken)}
-                  />
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-    </div>
-  );
+   <div className="container mt-5">
+       <h2>Patient Medication Schedule (Patient ID: {PATIENT_ID})</h2>
+       <p>This schedule covers the next few days based on your prescriptions.</p>
+ 
+      {dates.length === 0 ? (
+          <p>No active prescriptions found.</p>
+      ) : (
+          dates.map(date => (
+              <div key={date} className="card mb-4 border-info">
+                  <div className="card-header bg-info text-white">
+                      <h4 className="mb-0">🗓️ {date}</h4>
+                  </div>
+                  <ul className="list-group list-group-flush">
+                      {dayWiseTasks[date].map(task => (
+                          <li 
+                              key={task.dose_id} 
+                              className={`list-group-item d-flex justify-content-between align-items-center ${task.is_taken ? 'list-group-item-success' : ''}`}
+                              style={{textDecoration: task.is_taken ? 'line-through' : 'none'}}
+                          >
+                              <div>
+                                  <strong>{task.time_to_take}:</strong> {task.medicine_name} ({task.dosage}) 
+                                  <small className='text-muted ms-2'> - for {task.disease}</small>
+                              </div>
+                              <input
+                                  type="checkbox"
+                                  checked={task.is_taken}
+                                  // This update will globally mark the entire prescription as taken/not taken
+                                  // until the backend is updated for day-wise tracking.
+                                  onChange={() => handleToggleTaken(task.dose_id, task.is_taken)}
+                              />
+                          </li>
+                      ))}
+                  </ul>
+              </div>
+          ))
+      )}
+    </div>
+  );
 };
 
 export default PatientToDo;

@@ -12,6 +12,7 @@ const DoctorForm = ({ onPrescriptionAdded }) => {
     medicine_name: '',
     dosage: '',
     time_to_take: '',
+    days_to_take: '',
   });
 
   const handleInputChange = (e) => {
@@ -67,8 +68,12 @@ const DoctorForm = ({ onPrescriptionAdded }) => {
             <input type="text" className='form-control' name='dosage' onChange={handleInputChange} value={formData.dosage} required />
           </div>
           <div className="col-4 mb-3">
-            <label className="form-label">Time to Take (e.g., Morning, Noon, Night)</label>
+            <label className="form-label">No. of Times to Take (e.g., Morning, Noon, Night)</label>
             <input type="text" className='form-control' name='time_to_take' onChange={handleInputChange} value={formData.time_to_take} required />
+          </div>
+          <div className="col-3 mb-3">
+            <label className="form-label">Days to Take</label>
+            <input type="number" className='form-control' name='days_to_take' onChange={handleInputChange} value={formData.days_to_take} required />
           </div>
         </div>
         <button type="submit" className="btn btn-primary">Save Prescription Item</button>
