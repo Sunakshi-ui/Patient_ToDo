@@ -157,7 +157,7 @@ async def create_prescription(pres: PrescriptionCreate, db: dbdependency):
     patient = db.query(models.Patient).filter(models.Patient.id == pres.patient_id).first()
     if not patient:
         raise HTTPException(status_code=404, detail="Patient not found")
-        
+
     db_pres = models.Prescription(**pres.dict())
     db.add(db_pres)
     db.commit()

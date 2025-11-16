@@ -11,7 +11,7 @@ const DoctorForm = ({ onPrescriptionAdded }) => {
     disease: '',
     medicine_name: '',
     dosage: '',
-    time_to_take: '',
+    no_of_time: '',
     days_to_take: '',
   });
 
@@ -24,21 +24,40 @@ const DoctorForm = ({ onPrescriptionAdded }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const payload = {
+      ...formData,
+      patient_id: parseInt(formData.patient_id, 10),
+      no_of_time: parseInt(formData.no_of_time, 10),
+      days_to_take: parseInt(formData.days_to_take, 10),
+    };
+
+    if (
+      Number.isNaN(payload.patient_id) ||
+      Number.isNaN(payload.no_of_time) ||
+      Number.isNaN(payload.days_to_take)
+    ) {
+      alert('Please enter valid integers for Patient ID, No. of Times and Days to Take.');
+      return;
+    }
+
     try {
-      await api.post('/prescriptions/', {
-          ...formData,
-          patient_id: parseInt(formData.patient_id), // Ensure ID is integer
-      });
+      await api.post('/prescriptions/', payload);
       alert('Prescription entry saved successfully!');
       // Clear form after success
       setFormData({ 
-        patient_id: '', symptoms: '', disease: '', 
-        medicine_name: '', dosage: '', time_to_take: '' 
+        patient_id: '', 
+        symptoms: '', 
+        disease: '', 
+        medicine_name: '', 
+        dosage: '', 
+        no_of_time: '' , 
+        days_to_take: ''
       });
       if (onPrescriptionAdded) onPrescriptionAdded();
     } catch (error) {
       console.error('Error saving prescription:', error);
-      alert('Error saving prescription. Check patient ID.');
+      console.error('Backend response:', error.response?.data);
+      alert('Error saving prescription. Check required fields and types.');
     }
   };
 
@@ -68,8 +87,8 @@ const DoctorForm = ({ onPrescriptionAdded }) => {
             <input type="text" className='form-control' name='dosage' onChange={handleInputChange} value={formData.dosage} required />
           </div>
           <div className="col-4 mb-3">
-            <label className="form-label">No. of Times to Take (e.g., Morning, Noon, Night)</label>
-            <input type="text" className='form-control' name='time_to_take' onChange={handleInputChange} value={formData.time_to_take} required />
+            <label className="form-label">No. of Times to Take</label>
+            <input type="number" className='form-control' name='no_of_time' onChange={handleInputChange} value={formData.no_of_time} required />
           </div>
           <div className="col-3 mb-3">
             <label className="form-label">Days to Take</label>
