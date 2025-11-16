@@ -82,7 +82,7 @@ const PatientToDo = () => {
           dates.map(date => (
               <div key={date} className="card mb-4 border-info">
                   <div className="card-header bg-info text-white">
-                      <h4 className="mb-0">🗓️ {date}</h4>
+                      <h4 className="mb-0">Date: {date}</h4>
                   </div>
                   <ul className="list-group list-group-flush">
                       {dayWiseTasks[date].map(task => (
@@ -92,7 +92,7 @@ const PatientToDo = () => {
                               style={{textDecoration: task.is_taken ? 'line-through' : 'none'}}
                           >
                               <div>
-                                  <strong>{task.time_to_take}:</strong> {task.medicine_name} ({task.dosage}) 
+                                  <strong>{task.scheduled_time}:</strong> {task.medicine_name} ({task.dosage}) 
                                   <small className='text-muted ms-2'> - for {task.disease}</small>
                               </div>
                               <input
