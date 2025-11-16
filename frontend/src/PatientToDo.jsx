@@ -2,9 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import api from './api';
 
-// For demonstration, use a fixed patient ID (1)
-const PATIENT_ID = 1; 
-
 // Helper to generate a date N days from now
 const getDateString = (dayOffset) => {
   const date = new Date();
@@ -30,13 +27,29 @@ const transformTasks = (flatTasks) => {
 
 
 const PatientToDo = () => {
+    const [allId, setAllID] = useState([]); // All Patient IDs from BE
+    const [id, setId] = useState(""); //selected patient ID
+
     const [schedule, setSchedule] = useState({}); // Flat list from BE
     const [dayWiseTasks, setDayWiseTasks] = useState({}); // Transformed list for rendering
+
+    useEffect(() => {
+  const fetchAllPatients = async () => {
+    try {
+      const response = await api.get('/patients'); // backend endpoint
+      setAllID(response.data); // assuming response.data is an array of patients
+    } catch (error) {
+      console.error('Error fetching patients:', error);
+    }
+  };
+
+  fetchAllPatients();
+}, []);
 
     const fetchSchedule = async () => {
         try {
             // CALL THE NEW ENDPOINT
-            const response = await api.get(`/patient/${PATIENT_ID}/schedule`);
+            const response = await api.get(`/patient/${id}/schedule`);
             const flatSchedule = response.data;
             setSchedule(flatSchedule);
             setDayWiseTasks(transformTasks(flatSchedule));
@@ -45,9 +58,16 @@ const PatientToDo = () => {
         }
     };
 
-    useEffect(() => {
-        fetchSchedule();
-    }, []);
+useEffect(() => {
+  if (id) {
+    fetchSchedule(id);
+  } else {
+    // Clear the schedule when no patient is selected
+    setSchedule([]);
+    setDayWiseTasks({});
+  }
+}, [id]);
+
 
     const handleToggleTaken = async (doseId, currentStatus) => {
         const newStatus = !currentStatus;
@@ -73,12 +93,36 @@ const PatientToDo = () => {
 
   return (
    <div className="container mt-5">
-       <h2>Patient Medication Schedule (Patient ID: {PATIENT_ID})</h2>
+    <div className="container mt-5">
+  <h2>Patient Medication Schedule</h2>
+  <p>Select a patient to view their schedule:</p>
+  <div>
+
+  <select
+    className="form-select mb-4"
+    value={id}
+    onChange={(e) => setId(e.target.value)}
+  >
+
+    
+    <option value="">-- Select Patient --</option>
+    {allId.map(p => (
+    <option key={p.id} value={p.id}>
+      {p.name ? `${p.name} (ID: ${p.id})` : `Patient ${p.id}`}
+    </option>
+  ))}
+  </select>
+  </div>
+</div>
+
+       <h2>(Patient ID: {id})</h2>
+       
        <p>This schedule covers the next few days based on your prescriptions.</p>
- 
-      {dates.length === 0 ? (
-          <p>No active prescriptions found.</p>
-      ) : (
+       {id === "" ? (
+  <p>Please select a patient.</p>
+) : dates.length === 0 ? (
+  <p>No active prescriptions found.</p>
+) : (
           dates.map(date => (
               <div key={date} className="card mb-4 border-info">
                   <div className="card-header bg-info text-white">

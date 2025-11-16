@@ -32,7 +32,7 @@ class DoctorCreate(BaseModel):
     name: str
     password: str
 class PatientCreate(BaseModel):
-    name: str
+    username: str
     password: str
 
 # Used for Doctor creating a new Prescription/Medicine item

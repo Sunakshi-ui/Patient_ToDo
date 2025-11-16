@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 // Assuming DoctorForm.jsx and PatientToDo.jsx were created as suggested previously
 import DoctorForm from './DoctorForm';
 import PatientToDo from './PatientToDo';
+import  Register  from './Register';
 import './App.css'; // Your custom styles
 
 const App = () => {
@@ -11,6 +12,8 @@ const App = () => {
   // Function to determine which component to render
   const renderView = () => {
     switch (viewMode) {
+      case 'register':
+        return <Register />;
       case 'doctor':
         // The Doctor view is the data entry form
         return <DoctorForm />;
@@ -32,10 +35,18 @@ const App = () => {
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
                 <button 
+                  className={`btn btn-link nav-link ${viewMode === 'register' ? 'text-warning' : 'text-white'}`} 
+                  onClick={() => setViewMode('register')}
+                >
+                  Register
+                </button>
+              </li>
+              <li className="nav-item">
+                <button 
                   className={`btn btn-link nav-link ${viewMode === 'doctor' ? 'text-warning' : 'text-white'}`} 
                   onClick={() => setViewMode('doctor')}
                 >
-                  🧑‍⚕️ Doctor Mode (Data Entry)
+                  Doctor Mode (Data Entry)
                 </button>
               </li>
               <li className="nav-item">
@@ -43,7 +54,7 @@ const App = () => {
                   className={`btn btn-link nav-link ${viewMode === 'patient' ? 'text-warning' : 'text-white'}`}
                   onClick={() => setViewMode('patient')}
                 >
-                  💊 Patient Mode (To-Do List)
+                  Patient Mode (To-Do List)
                 </button>
               </li>
             </ul>
