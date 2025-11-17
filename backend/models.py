@@ -19,7 +19,7 @@ class Patient(Base):
 class Doctor(Base):
     __tablename__ = "doctors"
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(30), index=True)
+    username = Column(String(30), index=True)
     password = Column(String(10))
 
 # 3. Prescription Model

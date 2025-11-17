@@ -29,7 +29,7 @@ app.add_middleware(
 
 # --- Pydantic Schemas ---
 class DoctorCreate(BaseModel):
-    name: str
+    username: str
     password: str
 class PatientCreate(BaseModel):
     username: str
@@ -97,11 +97,11 @@ async def get_patients(db: dbdependency):
 
 #U
 class DoctorUpdate(BaseModel):
-    name: str | None = None
+    username: str | None = None
     password: str | None = None
 
 class PatientUpdate(BaseModel):
-    name: str | None = None
+    username: str | None = None
     password: str | None = None
 
 @app.put("/doctor/{doctor_id}", status_code=status.HTTP_200_OK)
@@ -109,8 +109,8 @@ async def update_doctor(doctor_id: int, put: DoctorUpdate, db: dbdependency):
     db_doctor = db.query(models.Doctor).filter(models.Doctor.id == doctor_id).first()
     if not db_doctor:
         raise HTTPException(status_code=404, detail="Doctor not found")
-    if put.name is not None:
-        db_doctor.name = put.name
+    if put.username is not None:
+        db_doctor.username = put.username
     if put.password is not None:
         db_doctor.password = put.password
     db.commit()
@@ -122,8 +122,8 @@ async def update_patient(patient_id: int, put: PatientUpdate, db: dbdependency):
     db_patient = db.query(models.Patient).filter(models.Patient.id == patient_id).first()
     if not db_patient:
         raise HTTPException(status_code=404, detail="Patient not found")
-    if put.name is not None:
-        db_patient.name = put.name
+    if put.username is not None:
+        db_patient.username = put.username
     if put.password is not None:
         db_patient.password = put.password
     db.commit()

@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import api from './api';
 
 const Register = () => {
+      // State to switch between views: 'doctor' or 'patient'
+  const [viewMode, setViewMode] = useState('Rdoctor'); 
+     
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -19,7 +22,13 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/patient/', formData); //calling the backend register endpoint
+            if (viewMode === 'Rdoctor') {
+                await api.post('/doctor/', formData); //calling the backend register endpoint
+            } 
+
+            else if (viewMode === 'Rpatient') {
+                await api.post('/patient/', formData); //calling the backend register endpoint
+            }
             alert('Registration successful!');
         } catch (error) {
             console.error('Error during registration:', error);
@@ -30,6 +39,14 @@ const Register = () => {
     return (
         <div className="container mt-5">
             <h2>User Registration</h2>
+            <select className='form-select mb-4' 
+            value={viewMode}
+            onChange={(e) => setViewMode(e.target.value)}
+            >
+                <option value="Rdoctor">Register a Doctor</option>
+                <option value="Rpatient">Register a Patient</option>
+            </select>
+
             <form onSubmit = {handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="username" className="form-label">Name</label>
@@ -62,5 +79,6 @@ const Register = () => {
         </div>
     )
 }
+
 
 export default Register;

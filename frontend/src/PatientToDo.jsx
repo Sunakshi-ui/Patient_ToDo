@@ -103,8 +103,6 @@ useEffect(() => {
     value={id}
     onChange={(e) => setId(e.target.value)}
   >
-
-    
     <option value="">-- Select Patient --</option>
     {allId.map(p => (
     <option key={p.id} value={p.id}>
