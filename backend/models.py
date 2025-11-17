@@ -54,7 +54,7 @@ class DailyDose(Base):
     prescription = relationship("Prescription", back_populates="doses") #it's FKname in Prescription model
     
     # What was scheduled (A copy of the required time/details)
-    scheduled_time = Column(String(15)) # E.g., 'Morning' #can i remove this?
+    scheduled_time = Column(String(15))  
     
     # The specific date this dose was due
     due_date = Column(String(15)) # We'll store the date as a string (YYYY-MM-DD)

@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import api from './api';
+import ListAll from './ListAll';
+
 
 const Register = () => {
       // State to switch between views: 'doctor' or 'patient'
@@ -76,6 +78,7 @@ const Register = () => {
                     
                 </div>
             </form>
+            <ListAll />
         </div>
     )
 }

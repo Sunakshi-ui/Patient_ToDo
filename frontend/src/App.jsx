@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // Assuming DoctorForm.jsx and PatientToDo.jsx were created as suggested previously
 import DoctorForm from './DoctorForm';
 import PatientToDo from './PatientToDo';
@@ -38,7 +38,7 @@ const App = () => {
                   className={`btn btn-link nav-link ${viewMode === 'register' ? 'text-warning' : 'text-white'}`} 
                   onClick={() => setViewMode('register')}
                 >
-                  Register
+                  Admin
                 </button>
               </li>
               <li className="nav-item">
