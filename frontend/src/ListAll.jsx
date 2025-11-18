@@ -85,7 +85,7 @@ const ListAll = () => {
         }
     };
     return (
-        <div className="container mt-5">
+        <div className="contain">
             <h2>List All Users</h2>
             <select className='form-select mb-4' 
             value={listMode}

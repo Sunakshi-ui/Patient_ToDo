@@ -28,42 +28,33 @@ const App = () => {
   return (
     <div>
       {/* --- Navigation Bar (User Mode Selector) --- */}
-      <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
-        <div className="container-fluid">
-          <a className="navbar-brand" href="#">Rx Tracker</a>
-          <div className="collapse navbar-collapse">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
+      <nav className='navbar'>
+              <a className="nav-item">
                 <button 
-                  className={`btn btn-link nav-link ${viewMode === 'register' ? 'text-warning' : 'text-white'}`} 
                   onClick={() => setViewMode('register')}
                 >
                   Admin
                 </button>
-              </li>
-              <li className="nav-item">
+              </a>
+              <a className="nav-item">
                 <button 
-                  className={`btn btn-link nav-link ${viewMode === 'doctor' ? 'text-warning' : 'text-white'}`} 
                   onClick={() => setViewMode('doctor')}
                 >
                   Doctor Mode (Data Entry)
                 </button>
-              </li>
-              <li className="nav-item">
+              </a>
+              <a className="nav-item">
                 <button 
-                  className={`btn btn-link nav-link ${viewMode === 'patient' ? 'text-warning' : 'text-white'}`}
                   onClick={() => setViewMode('patient')}
                 >
                   Patient Mode (To-Do List)
                 </button>
-              </li>
-            </ul>
-          </div>
-        </div>
+              </a>
+
       </nav>
       
       {/* --- Main Content Area --- */}
-      <div className="container mt-4">
+      <div className="contain">
         {renderView()}
       </div>
     </div>

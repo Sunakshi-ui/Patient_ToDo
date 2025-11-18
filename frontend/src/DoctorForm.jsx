@@ -3,9 +3,7 @@ import React, { useState } from 'react';
 import api from './api';
 
 const DoctorForm = ({ onPrescriptionAdded }) => {
-  // Assuming you can get the Patient IDs somehow (e.g., fetching a list of patients)
-  // For simplicity, we assume the doctor inputs the Patient ID.
-  const [formData, setFormData] = useState({
+   const [formData, setFormData] = useState({
     patient_id: '',
     symptoms: '',
     disease: '',

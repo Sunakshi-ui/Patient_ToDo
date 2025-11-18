@@ -39,7 +39,7 @@ const Register = () => {
     };
 
     return (
-        <div className="container mt-5">
+        <div className="contain">
             <h2>User Registration</h2>
             <select className='form-select mb-4' 
             value={viewMode}
