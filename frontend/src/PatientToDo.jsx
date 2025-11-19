@@ -114,15 +114,18 @@ useEffect(() => {
 </div>
 
        <h2>(Patient ID: {id})</h2>
-       
-       <p>This schedule covers the next few days based on your prescriptions.</p>
+        <p>This schedule covers the next few days based on your prescriptions.</p>
+
+       <div className='container-keep'>
+
        {id === "" ? (
   <p>Please select a patient.</p>
 ) : dates.length === 0 ? (
   <p>No active prescriptions found.</p>
 ) : (
+  
           dates.map(date => (
-              <div key={date} className="card mb-4 border-info">
+              <div key={date} className="card">
                   <div className="card-header bg-info text-white">
                       <h4 className="mb-0">Date: {date}</h4>
                   </div>
@@ -149,8 +152,10 @@ useEffect(() => {
                   </ul>
               </div>
           ))
+          
       )}
     </div>
+</div>
   );
 };
 

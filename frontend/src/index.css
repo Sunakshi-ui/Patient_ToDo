@@ -3,8 +3,8 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color: rgba(255, 255, 255, 0.87);
-
+  color: rgba(0, 0, 0, 0.87);
+  
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -19,10 +19,19 @@
   border-radius: 8px;
 }
 
+nav {
+  width: 100%;
+  padding: 1rem 2rem;
+  background-color: #edeeff;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 body {
   margin: 0;
   display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -66,10 +75,6 @@ h2 {
   margin-bottom: 1rem;
 }
 
-p {
-  color: #555;
-}
-
 /* Patient dropdown */
 .form-select {
   border: 2px solid #17a2b8;
@@ -87,13 +92,35 @@ p {
 /* Card styling */
 .card {
   border-radius: 10px;
-  overflow: hidden;
   box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  background-color: #f8f9fa;
+  gap: 1rem;
   transition: transform 0.2s ease;
+    padding: 1em;
+  width: 370px;
+  text-align: left;
 }
 
 .card:hover {
   transform: translateY(-3px);
+}
+
+
+
+.read-the-docs {
+  color: #888;
+}
+
+.container-keep {
+  padding: 0.3rem;
+  margin: auto;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-evenly;
+  gap: 1rem;
+
 }
 
 /* Card header */
