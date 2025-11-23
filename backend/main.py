@@ -164,7 +164,7 @@ async def create_prescription(pres: PrescriptionCreate, db: dbdependency):
     db.refresh(db_pres)
     return db_pres
 
-SCHEDULE_TIMES = ["Morning", "Noon", "Evening", "Night", "Extra Dose 1", "Extra Dose 2"]
+SCHEDULE_TIMES = ["Morning", "Night", "Noon", "Evening", "Extra Dose 1", "Extra Dose 2"]
 
 # 2. Patient View Endpoint (Get ALL prescriptions/medicines for a specific patient)
 @app.get("/patient/{patient_id}/schedule", status_code=status.HTTP_200_OK)

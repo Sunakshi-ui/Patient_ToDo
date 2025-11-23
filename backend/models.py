@@ -10,7 +10,7 @@ from database import Base
 class Patient(Base):
     __tablename__ = "patients"
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String(30), unique=True, index=True) # Used for login/identification
+    username = Column(String(30), index=True) # Used for login/identification
     password = Column(String(10))
     prescriptions = relationship("Prescription", back_populates="patient") 
     #<FKname> = relationship("<ModelName>", back_populates="<related_name_in_other_model>")

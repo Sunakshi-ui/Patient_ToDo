@@ -157,25 +157,57 @@ const ListAll = () => {
                         {allPat.map((pat) => (
                             <li key={pat.id} className="list-group-item">
                                 ID: {pat.id}, Name: {pat.username}
-                                <button
-                                    className = "btn btn-warning btn-sm mx-2 float-end"
-                                    //edit function
-                                    onClick={() => handleEdit(pat.id)}
-                                >
-                                    Edit   
-                                </button>
+                                {editUser === pat.id ? (
+                                    // Render edit form
+                                    <div>
+                                        <input
+                                            type="text"
+                                            className="form-control mb-2"
+                                            name="username"
+                                            value={editData.username}
+                                            onChange={(e) => setEditData({ ...editData, username: e.target.value })}
+                                            placeholder="New Username"
+                                        />
+                                        <input
+                                            type="password"
+                                            className="form-control mb-2"
+                                            name="password"
+                                            value={editData.password}
+                                            onChange={(e) => setEditData({ ...editData, password: e.target.value })}
+                                            placeholder="New Password"
+                                        />
+                                        <button
+                                            className="btn btn-success btn-sm mx-2"
+                                            onClick={() =>
+                                                handleEdit(pat.id)
+
+                                            }
+                                        >
+                                            Save
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <button
+                                        className="btn btn-warning btn-sm mx-2 float-end"
+                                        onClick={() => setEditUser(pat.id)} // enter edit mode
+                                    >
+                                        Edit   
+                                    </button>
+                                )}  
+
                                 <button
                                     className="btn btn-danger btn-sm float-end"
                                     onClick={() => handleDelete(pat.id)}
                                 >
                                     Delete
                                 </button>
-
                             </li>
                         ))}
                     </ul>
                 </div>
             )}
+              
+            
         </div>
     );
 };
