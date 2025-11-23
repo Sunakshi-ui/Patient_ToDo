@@ -206,7 +206,6 @@ const ListAll = () => {
                     </ul>
                 </div>
             )}
-              
             
         </div>
     );
